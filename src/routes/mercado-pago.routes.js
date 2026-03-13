@@ -3,6 +3,6 @@ const routes = express.Router();
 
 const mercadoPagoController = require("../controllers/mercado-pago-controllers");
 
-routes.post('/', mercadoPagoController.createPos);
+routes.get('/', mercadoPagoController.createPos);
 
 module.exports = routes;

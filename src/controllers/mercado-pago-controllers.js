@@ -2,7 +2,38 @@ const { default: axios } = require("axios");
 
 exports.createPos = async (req, res, next) => {
     try {
+        const body = req.body;
 
+        if (!body?.name) {
+            return res.status(404).send({
+                retorno: {
+                    status: 404,
+                    mensagem: "O campo 'name' deve ser informado. Tente novamente."
+                },
+                registros: []
+            });
+        }
+
+        if (!body?.store_id) {
+            return res.status(404).send({
+                retorno: {
+                    status: 404,
+                    mensagem: "O campo 'store_id' deve ser informado. Tente novamente."
+                },
+                registros: []
+            });
+        }
+
+        if (!body?.external_id) {
+            return res.status(404).send({
+                retorno: {
+                    status: 404,
+                    mensagem: "O campo 'external_id' deve ser informado. Tente novamente."
+                },
+                registros: []
+            });
+        }
+        
         const requestOptions = {
             headers: {
                 'Content-Type': 'application/json',
@@ -10,19 +41,12 @@ exports.createPos = async (req, res, next) => {
             }
         };
 
-        const body = {
-            "name": "PONTO VENDA-2",
-            "store_id": "79584422",
-            "external_id": "22714341000161"
-        };
+        const response = await axios.post('https://api.mercadopago.com/pos', body, requestOptions)
 
-        const response = await axios.post('https://api.mercadopago.com/pos', JSON.stringify(body), requestOptions)
-        console.log(response.data);
-
-        return res.status(200).send({
+        return res.status(201).send({
             retorno: {
-                status: 200,
-                mensagem: "Teste API"
+                status: 201,
+                mensagem: response.data?.message || "Ponto de venda criado com sucesso."
             },
             registros: response.data
         });
